@@ -8,6 +8,8 @@ import { SessionStatus, type Session } from '../Session/types'
 import { SECRET_KEY } from '@/domain/constants/app'
 import { decodeJWT, hashPassword, signJWT } from '@/domain/utils/crypto'
 import { updateUser } from '@/domain/actions/users'
+import { createSession } from '@/domain/actions/session'
+import type { Prisma } from '@prisma/client'
 
 export class User implements UserProps {
   id: string
@@ -82,13 +84,11 @@ export class User implements UserProps {
         },
       }, SECRET_KEY)
 
-      const session = {
-        userId: this.id,
+      await createSession({
         accessToken: token,
-        expiredAt: expire.toMillis(),
-        status: SessionStatus.ACTIVE,
-      }
-      await updateUser({ id: this.id }, session)
+        user: this as Prisma.UserCreateNestedOneWithoutSessionsInput,
+      })
+
       return { accessToken: token, expiredAt: expire.toMillis() }
     }
 
