@@ -1,6 +1,9 @@
-import { SessionStatus, getSession, getUserByAccessToken } from '@/domain/db'
-import { isTokenExpired } from '@/domain/utils'
+import { getUserByAccessToken } from '@/domain/actions/users'
+import { getSession } from '@/domain/actions/session'
+import { SessionStatus } from '@/domain/prisma/features/Session'
+import { isTokenExpired } from '@/domain/utils/crypto'
 import { UnauthorizedException } from '../../../exceptions/Unauthorized'
+import { SECRET_KEY } from '@/domain/constants/app'
 
 export const validateAccessAuthorization = async (req: Request) => {
   const BEARER = 'Bearer'
@@ -29,7 +32,7 @@ export const validateAccessAuthorization = async (req: Request) => {
   }
 
   const session = await getSession({ accessToken })
-  const isExpired = await isTokenExpired(accessToken, user.secretKey)
+  const isExpired = await isTokenExpired(accessToken, SECRET_KEY)
   if (isExpired || session?.status === SessionStatus.EXPIRED) {
     err.setMessage('Access token is expired')
     throw err

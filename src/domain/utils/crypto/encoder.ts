@@ -113,7 +113,7 @@ export const encodeHash = (payload: Payload, opts: Options = {}): Hash =>{
   }
 }
 
-export const decodeHash = (encrypted: Hash, secret: string, opts: Options = {}) =>{
+export const decodeHash = (encrypted: Hash | string, secret: string, opts: Options = {}) =>{
   if (!opts.algorithm) { opts.algorithm = Algorithm.AES }
   const { algorithm, hashOptions } = opts
 
