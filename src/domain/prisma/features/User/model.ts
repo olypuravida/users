@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import type { User as UserProps } from './types'
+import type { UserProps, UserStatus } from './types'
 import type { UserInfo } from '../UserInfo/types'
 import type { Role } from '../Role/types'
 import { SessionStatus, type Session } from '../Session/types'
@@ -16,7 +16,7 @@ export class User implements UserProps {
   username: string
   email: string
   password: string
-  status: string
+  status: UserStatus
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -93,5 +93,21 @@ export class User implements UserProps {
     }
 
     return { accessToken, expiredAt }
+  }
+
+  async json() {
+    const { accessToken } = await this.getAccessToken() ?? {}
+    // if (!this.roles) { await this.getRoles() }
+    const roles = this.roles?.map(({ name }: any) => name)
+    // const info = await this.getInfo()
+
+    return {
+      id: this.id,
+      username: this.username,
+      email: this.email,
+      accessToken,
+      roles,
+      info: this.info,
+    }
   }
 }
