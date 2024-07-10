@@ -1,18 +1,20 @@
 'use server'
 
-import { usePrisma } from '../prisma/hooks'
 import type { Prisma } from '@prisma/client'
+import { usePrisma } from '../prisma/hooks'
+import { User } from '../prisma/features/User/model'
+import type { UserProps } from '../prisma/features/User'
 
 export const getUsers = async () => {
   const { user } = usePrisma()
   const users = await user.findMany()
-  return users
+  return users.map(user => new User(user as UserProps))
 }
 
 export const getUser = async (where: Prisma.UserWhereUniqueInput) => {
   const { user } = usePrisma()
   const result = await user.findUnique({ where })
-  return result
+  return new User(result as UserProps)
 }
 
 export const getUserByUsername = async (username: string) => {
@@ -21,7 +23,9 @@ export const getUserByUsername = async (username: string) => {
   if (!result) {
     result = await user.findUnique({ where: { email: username } })
   }
-  return result
+
+  if (!result) { return null }
+  return new User(result as UserProps)
 }
 
 export const getUserByAccessToken = async (accessToken: string) => {
@@ -30,19 +34,19 @@ export const getUserByAccessToken = async (accessToken: string) => {
     where: { accessToken },
     include: { user: true },
   })
-  return sessionResult?.user
+  return new User(sessionResult?.user as UserProps)
 }
 
 export const createUser = async (data: Prisma.UserCreateInput) => {
   const { user } = usePrisma()
   const result = await user.create({ data })
-  return result
+  return new User(result as UserProps)
 }
 
 export const updateUser = async (where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput) => {
   const { user } = usePrisma()
   const result = await user.update({ where, data })
-  return result
+  return new User(result as UserProps)
 }
 
 export const deleteUser = async (where: Prisma.UserWhereUniqueInput) => {

@@ -3,9 +3,15 @@
 import type { Prisma } from '@prisma/client'
 import { usePrisma } from '../prisma/hooks'
 
-export const getSession = async () => {
+export const getSessions = async () => {
   const { session } = usePrisma()
   const result = await session.findMany()
+  return result
+}
+
+export const getSession = async (where: Prisma.SessionWhereUniqueInput) => {
+  const { session } = usePrisma()
+  const result = await session.findUnique({ where })
   return result
 }
 
