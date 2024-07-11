@@ -5,10 +5,11 @@ export enum SessionStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   DELETED = 'DELETED',
+  EXPIRED = 'EXPIRED',
 }
 
 // Interface for Session model
-export interface Session extends SessionModel {
+export interface SessionProps extends SessionModel {
   id: string
   accessToken: string
   status: SessionStatus
