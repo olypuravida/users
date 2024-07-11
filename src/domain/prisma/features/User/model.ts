@@ -16,6 +16,7 @@ export class User implements UserProps {
   username: string
   email: string
   password: string
+  emailVerified: boolean
   status: UserStatus
   createdAt: Date
   updatedAt: Date
@@ -31,6 +32,7 @@ export class User implements UserProps {
     this.username = user.username
     this.email = user.email
     this.password = user.password
+    this.emailVerified = user.emailVerified
     this.status = user.status
     this.createdAt = user.createdAt
     this.updatedAt = user.updatedAt
