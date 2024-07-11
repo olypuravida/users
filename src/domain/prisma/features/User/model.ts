@@ -47,6 +47,7 @@ export class User implements UserProps {
   }
 
   async getAccessToken() {
+    this.sessions ??= []
     const activeSessions = this.sessions.filter(({ status }) => status === SessionStatus.ACTIVE)
     if (!activeSessions || activeSessions.length === 0) { return null }
     let activeToken = null
