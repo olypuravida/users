@@ -27,7 +27,7 @@ export const validateAccessAuthorization = async (req: Request) => {
     throw err
   }
 
-  if (accessToken === MASTER_TOKEN) {
+  if (MASTER_TOKEN && accessToken === MASTER_TOKEN) {
     return true
   }
 
