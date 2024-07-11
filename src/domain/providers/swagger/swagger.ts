@@ -1,5 +1,7 @@
 import { createSwaggerSpec } from 'next-swagger-doc'
 import { APP_TITLE } from '../../constants/app'
+
+import requestBodies from './docs/requestBodies'
 import responses from './docs/responses'
 import schemas from './docs/schemas'
 import paths from './docs/paths'
@@ -28,6 +30,7 @@ export const getApiDocs = async () => {
           },
         },
 
+        requestBodies,
         responses,
         schemas,
       },
