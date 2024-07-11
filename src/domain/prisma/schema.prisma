@@ -41,6 +41,7 @@ model UserInfo {
   phone           String
   address         String
   school          String?
+  position        String?
   class           String?
   docType         String?
   docID           String?

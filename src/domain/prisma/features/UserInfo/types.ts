@@ -10,6 +10,7 @@ export interface UserInfoProps extends UserInfoModel {
   phone: string
   address: string
   school: string | null
+  position: string | null
   class: string | null
   docType: string | null
   docID: string | null

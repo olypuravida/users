@@ -9,6 +9,7 @@ export class UserInfo implements UserInfoProps {
   phone: string
   address: string
   school: string | null
+  position: string | null
   class: string | null
   docType: string | null
   docID: string | null
@@ -29,6 +30,7 @@ export class UserInfo implements UserInfoProps {
     this.phone = userInfo.phone
     this.address = userInfo.address
     this.school = userInfo.school
+    this.position = userInfo.position
     this.class = userInfo.class
     this.docType = userInfo.docType
     this.docID = userInfo.docID
