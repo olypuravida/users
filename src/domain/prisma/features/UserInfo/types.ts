@@ -2,7 +2,7 @@ import type { UserInfo as UserInfoModel } from '@prisma/client'
 import type { User } from '../User/model'
 
 // Interface for UserInfo model
-export interface UserInfo extends UserInfoModel {
+export interface UserInfoProps extends UserInfoModel {
   id: string
   firstName: string
   lastName: string
@@ -10,6 +10,7 @@ export interface UserInfo extends UserInfoModel {
   phone: string
   address: string
   school: string | null
+  position: string | null
   class: string | null
   docType: string | null
   docID: string | null
@@ -21,5 +22,5 @@ export interface UserInfo extends UserInfoModel {
 
   user?: User
   userId: string
-  teacherId?: string
+  teacherId: string | null
 }

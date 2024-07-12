@@ -1,36 +1,38 @@
+import type { Prisma } from '@prisma/client'
 import { DateTime } from 'luxon'
 
-import type { UserProps, UserStatus } from './types'
-import type { UserInfo } from '../UserInfo/types'
-import type { Role } from '../Role/types'
-import { SessionStatus, type Session } from '../Session/types'
-
 import { SECRET_KEY } from '@/domain/constants/app'
-import { decodeJWT, hashPassword, signJWT } from '@/domain/utils/crypto'
-import { updateUser } from '@/domain/actions/users'
 import { createSession } from '@/domain/actions/session'
-import type { Prisma } from '@prisma/client'
+import { updateUser } from '@/domain/actions/users'
+import { decodeJWT, hashPassword, signJWT } from '@/domain/utils/crypto'
+
+import type { UserProps, UserStatus } from './types'
+import type { UserInfoProps } from '../UserInfo/types'
+import type { RoleProps } from '../Role/types'
+import { SessionStatus, type SessionProps } from '../Session/types'
 
 export class User implements UserProps {
   id: string
   username: string
   email: string
   password: string
+  emailVerified: boolean
   status: UserStatus
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
-  info?: UserInfo
+  info?: UserInfoProps
   infoId: string | null
-  roles: Role[]
+  roles: RoleProps[]
   roleIds: string[]
-  sessions: Session[]
+  sessions: SessionProps[]
 
   constructor(user: UserProps) {
     this.id = user.id
     this.username = user.username
     this.email = user.email
     this.password = user.password
+    this.emailVerified = user.emailVerified
     this.status = user.status
     this.createdAt = user.createdAt
     this.updatedAt = user.updatedAt
@@ -47,6 +49,7 @@ export class User implements UserProps {
   }
 
   async getAccessToken() {
+    this.sessions ??= []
     const activeSessions = this.sessions.filter(({ status }) => status === SessionStatus.ACTIVE)
     if (!activeSessions || activeSessions.length === 0) { return null }
     let activeToken = null

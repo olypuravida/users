@@ -5,8 +5,10 @@ import { isTokenExpired } from '@/domain/utils/crypto'
 import { UnauthorizedException } from '../../../exceptions/Unauthorized'
 import { SECRET_KEY } from '@/domain/constants/app'
 
+const BEARER = 'Bearer'
+const MASTER_TOKEN = `${process.env.MASTER_TOKEN}`
+
 export const validateAccessAuthorization = async (req: Request) => {
-  const BEARER = 'Bearer'
   const bearerToken = req.headers.get('authorization')
   const isBearer = !!bearerToken?.includes(BEARER)
   const accessToken = bearerToken?.replace(BEARER, '').trim()
@@ -25,6 +27,10 @@ export const validateAccessAuthorization = async (req: Request) => {
     throw err
   }
 
+  if (MASTER_TOKEN && accessToken === MASTER_TOKEN) {
+    return true
+  }
+
   const user = await getUserByAccessToken(accessToken)
   if (!user) {
     err.setMessage('Invalid access token')
@@ -37,5 +43,4 @@ export const validateAccessAuthorization = async (req: Request) => {
     err.setMessage('Access token is expired')
     throw err
   }
-
 }

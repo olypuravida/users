@@ -5,9 +5,9 @@ import { usePrisma } from '../prisma/hooks'
 import { User } from '../prisma/features/User/model'
 import type { UserProps } from '../prisma/features/User'
 
-export const getUsers = async () => {
+export const getUsers = async (where: Prisma.UserWhereInput) => {
   const { user } = usePrisma()
-  const users = await user.findMany()
+  const users = await user.findMany({ where })
   return users.map(user => new User(user as UserProps))
 }
 
@@ -39,8 +39,9 @@ export const getUserByAccessToken = async (accessToken: string) => {
 
 export const createUser = async (data: Prisma.UserCreateInput) => {
   const { user } = usePrisma()
-  const result = await user.create({ data })
-  return new User(result as UserProps)
+  const result = await user.create({ data, include: { info: true } })
+  return result
+  // return new User(result as UserProps)
 }
 
 export const updateUser = async (where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput) => {

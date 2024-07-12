@@ -9,11 +9,22 @@ const schemas = {
       },
       email: {
         type: 'string',
+        format: 'email',
         description: 'User email',
+        example: 'KpZtH@example.com',
+        required: true,
       },
       username: {
         type: 'string',
         description: 'User username',
+        example: 'johnDoe',
+        required: true,
+      },
+      password: {
+        type: 'string',
+        format: 'password',
+        description: 'User password',
+        required: true,
       },
       createdAt: {
         type: 'string',

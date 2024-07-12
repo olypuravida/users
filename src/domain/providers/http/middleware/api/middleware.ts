@@ -10,8 +10,6 @@ type Options = {
 }
 
 export const apiMiddleware = async (req: Request, params: any, res: Response, opts: Options = {}) => {
-  // const { loadMiddleware } = await import('../utils')
-  // const { corsMiddleware } = await import('../cors')
   const {
     validateOnlyMethods,
     validateParamsPermitted,
@@ -23,9 +21,6 @@ export const apiMiddleware = async (req: Request, params: any, res: Response, op
     permit,
     validator,
   } = opts
-
-  // CORS implementation
-  // await loadMiddleware(req, res, corsMiddleware)
 
   // Valid required method
   if (!!only && only.length > 0) {
