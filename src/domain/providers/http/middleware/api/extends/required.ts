@@ -1,6 +1,6 @@
 import { getUserByAccessToken } from '@/domain/actions/users'
 import { getSession } from '@/domain/actions/session'
-import { SessionStatus } from '@/domain/prisma/features/Session'
+import { SessionStatus } from '@/domain/prisma/features/Session/types'
 import { isTokenExpired } from '@/domain/utils/crypto'
 import { UnauthorizedException } from '../../../exceptions/Unauthorized'
 import { SECRET_KEY } from '@/domain/constants/app'
