@@ -1,9 +1,9 @@
 import type { NextResponse } from 'next/server'
-import type { MethodNotAllowedException } from '../exceptions/MethodNotAllowed'
+import { MethodNotAllowedException } from '../exceptions/MethodNotAllowed'
 import { InternalServerErrorException } from '../exceptions/InternalServerError'
-import type { NotFoundException } from '../exceptions/NotFound'
-import type { UnauthorizedException } from '../exceptions/Unauthorized'
-import type { BadRequestException } from '../exceptions/BadRequest'
+import { NotFoundException } from '../exceptions/NotFound'
+import { UnauthorizedException } from '../exceptions/Unauthorized'
+import { BadRequestException } from '../exceptions/BadRequest'
 
 type Response = typeof NextResponse
 
@@ -16,11 +16,11 @@ type AnyException = NotFoundException
 
 export const responseApiException = (res: Response, exception: AnyException) => {
   const exceptions = [
-    'NotFoundException',
-    'UnauthorizedException',
-    'MethodNotAllowedException',
-    'InternalServerErrorException',
-    'BadRequestException',
+    NotFoundException.name,
+    UnauthorizedException.name,
+    MethodNotAllowedException.name,
+    InternalServerErrorException.name,
+    BadRequestException.name,
   ]
   let err: AnyException = exception
 
