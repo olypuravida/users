@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client'
 
+let prisma: PrismaClient | null = null
+
 export const usePrisma = () => {
-  const prisma = new PrismaClient()
+  if (prisma) return prisma
+  prisma = new PrismaClient()
   return prisma
 }

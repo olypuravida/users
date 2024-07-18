@@ -1,15 +1,15 @@
-import type { Prisma } from '@prisma/client'
+import type { Role, Session, UserInfo } from '@prisma/client'
 import { DateTime } from 'luxon'
 
 import { SECRET_KEY } from '@/domain/constants/app'
-import { createSession } from '@/domain/actions/session'
+import { createSession, getSessions } from '@/domain/actions/session'
+import { getRoles } from '@/domain/actions/roles'
+import { getUserInfo } from '@/domain/actions/user-info'
 import { updateUser } from '@/domain/actions/users'
 import { decodeJWT, hashPassword, signJWT } from '@/domain/utils/crypto'
 
 import type { UserProps, UserStatus } from './types'
-import type { UserInfoProps } from '../UserInfo/types'
-import type { RoleProps } from '../Role/types'
-import { SessionStatus, type SessionProps } from '../Session/types'
+import { SessionStatus } from '../Session/types'
 
 export class User implements UserProps {
   id: string
@@ -21,11 +21,10 @@ export class User implements UserProps {
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
-  info?: UserInfoProps
-  infoId: string | null
-  roles: RoleProps[]
+  info?: UserInfo
+  roles: Role[]
   roleIds: string[]
-  sessions: SessionProps[]
+  sessions: Session[]
 
   constructor(user: UserProps) {
     this.id = user.id
@@ -38,10 +37,35 @@ export class User implements UserProps {
     this.updatedAt = user.updatedAt
     this.deletedAt = user.deletedAt
     this.info = user.info
-    this.infoId = user.infoId
     this.roles = user.roles
     this.roleIds = user.roleIds
     this.sessions = user.sessions
+  }
+
+  async getRoles() {
+    if (!this.roleIds || this.roleIds.length === 0) {
+      this.roles = []
+    }
+
+    if (!this.roles && this.roleIds) {
+      this.roles = await getRoles({ id: { in: this.roleIds } })
+    }
+
+    return this.roles
+  }
+
+  async getInfo() {
+    if (!this.info) {
+      this.info = await getUserInfo({ userId: this.id })
+    }
+    return this.info
+  }
+
+  async getSessions() {
+    if (!this.sessions || this.sessions.length === 0) {
+      this.sessions = await getSessions({ userId: this.id })
+    }
+    return this.sessions
   }
 
   hasSamePassword(password: string) {
@@ -49,7 +73,7 @@ export class User implements UserProps {
   }
 
   async getAccessToken() {
-    this.sessions ??= []
+    await this.getSessions()
     const activeSessions = this.sessions.filter(({ status }) => status === SessionStatus.ACTIVE)
     if (!activeSessions || activeSessions.length === 0) { return null }
     let activeToken = null
@@ -74,6 +98,7 @@ export class User implements UserProps {
 
   async sign() {
     const { accessToken, expiredAt } = await this.getAccessToken() || {}
+    console.log('getAccessToken', { accessToken, expiredAt })
 
     if (!accessToken) {
       const expire = DateTime.now().plus({ 'days': 7 })
@@ -83,13 +108,15 @@ export class User implements UserProps {
           id: this.id,
           username: this.username,
           email: this.email,
-          roles: this.roles.map(({ name }) => name),
+          roles: this.roles?.map(({ name }) => name),
         },
       }, SECRET_KEY)
 
       await createSession({
         accessToken: token,
-        user: this as Prisma.UserCreateNestedOneWithoutSessionsInput,
+        user: {
+          connect: { id: this.id },
+        },
       })
 
       return { accessToken: token, expiredAt: expire.toMillis() }
@@ -99,10 +126,10 @@ export class User implements UserProps {
   }
 
   async json() {
+    await this.getRoles()
+    await this.getInfo()
     const { accessToken } = await this.getAccessToken() ?? {}
-    // if (!this.roles) { await this.getRoles() }
-    const roles = this.roles?.map(({ name }: any) => name)
-    // const info = await this.getInfo()
+    const roles = this.roles.map(({ name }: any) => name)
 
     return {
       id: this.id,
