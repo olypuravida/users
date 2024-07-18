@@ -1,7 +1,9 @@
-import type { User as UserModel } from '@prisma/client'
-import type { RoleProps } from '../Role/types'
-import type { SessionProps } from '../Session/types'
-import type { UserInfoProps } from '../UserInfo/types'
+import type {
+  Role,
+  Session,
+  UserInfo,
+  User as UserModel,
+} from '@prisma/client'
 
 export enum UserStatus {
   ACTIVE = 'ACTIVE',
@@ -20,9 +22,8 @@ export interface UserProps extends UserModel {
   updatedAt: Date
   deletedAt: Date | null
 
-  info?: UserInfoProps
-  infoId: string | null
-  roles: RoleProps[]
+  info?: UserInfo
+  roles: Role[]
   roleIds: string[]
-  sessions: SessionProps[]
+  sessions: Session[]
 }

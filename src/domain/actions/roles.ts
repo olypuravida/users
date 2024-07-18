@@ -1,12 +1,12 @@
 'use server'
 
-import type { Prisma } from '@prisma/client'
+import type { Prisma, Role } from '@prisma/client'
 import { usePrisma } from '../prisma/hooks'
 
 export const getRoles = async (where: Prisma.RoleWhereInput) => {
   const { role } = usePrisma()
   const result = await role.findMany({ where })
-  return result
+  return result as Role[]
 }
 
 export const getRole = async (where: Prisma.RoleWhereUniqueInput) => {

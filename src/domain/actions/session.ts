@@ -1,12 +1,12 @@
 'use server'
 
-import type { Prisma } from '@prisma/client'
+import type { Prisma, Session } from '@prisma/client'
 import { usePrisma } from '../prisma/hooks'
 
-export const getSessions = async () => {
+export const getSessions = async (where: Prisma.SessionWhereInput) => {
   const { session } = usePrisma()
-  const result = await session.findMany()
-  return result
+  const result = await session.findMany({ where })
+  return result as Session[]
 }
 
 export const getSession = async (where: Prisma.SessionWhereUniqueInput) => {

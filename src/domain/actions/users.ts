@@ -19,9 +19,17 @@ export const getUser = async (where: Prisma.UserWhereUniqueInput) => {
 
 export const getUserByUsername = async (username: string) => {
   const { user } = usePrisma()
-  let result = await user.findUnique({ where: { username } })
+  const include = { info: true, roles: true }
+  let result = await user.findUnique({
+    where: { username },
+    include,
+  })
+
   if (!result) {
-    result = await user.findUnique({ where: { email: username } })
+    result = await user.findUnique({
+      where: { email: username },
+      include,
+    })
   }
 
   if (!result) { return null }
