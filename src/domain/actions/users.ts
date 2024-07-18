@@ -42,6 +42,8 @@ export const getUserByAccessToken = async (accessToken: string) => {
     where: { accessToken },
     include: { user: true },
   })
+
+  if (!sessionResult) { return null }
   return new User(sessionResult?.user as UserProps)
 }
 
