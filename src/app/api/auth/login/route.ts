@@ -32,8 +32,6 @@ export async function POST(req: Request) {
     const isExpired = Number(expiredAt) < DateTime.now().toMillis()
     if (!accessToken || isExpired) { throw new UnauthorizedException() }
 
-    // setCookie('session', accessToken, { cookies })
-
     return responseApiSuccess(res, {
       content: {
         message: 'Login successfully!',

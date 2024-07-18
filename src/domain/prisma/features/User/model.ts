@@ -98,7 +98,6 @@ export class User implements UserProps {
 
   async sign() {
     const { accessToken, expiredAt } = await this.getAccessToken() || {}
-    console.log('getAccessToken', { accessToken, expiredAt })
 
     if (!accessToken) {
       const expire = DateTime.now().plus({ 'days': 7 })
