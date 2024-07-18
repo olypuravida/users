@@ -263,6 +263,36 @@ const responses = {
       },
     },
   },
+
+  TokenVerifySuccess: {
+    description: 'Token verify success response',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            content: {
+              type: 'object',
+              properties: {
+                message: {
+                  type: 'string',
+                  example: 'Token verified successfully!',
+                },
+                accessToken: {
+                  type: 'string',
+                  example: 'eyJhbGciOiJIUzI1NiJ9...',
+                },
+              },
+            },
+
+            status: {
+              $ref: '#/components/schemas/ResponseStatusOK',
+            },
+          },
+        },
+      },
+    },
+  },
 }
 
 export default responses

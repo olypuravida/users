@@ -87,7 +87,6 @@ const paths = {
       tags: ['Auth'],
       summary: 'Register teacher user',
       description: 'Register teacher user with data provided, required master bearer authorization header.',
-      security: [{ bearerAuth: [] }],
       requestBody: {
         $ref: '#/components/requestBodies/TeacherRequest',
       },
@@ -116,7 +115,6 @@ const paths = {
       tags: ['Auth'],
       summary: 'Register student user',
       description: 'Register student user with data provided, required master bearer authorization header.',
-      security: [{ bearerAuth: [] }],
       requestBody: {
         $ref: '#/components/requestBodies/StudentRequest',
       },
@@ -132,6 +130,26 @@ const paths = {
         },
         404: {
           $ref: '#/components/responses/NotFound',
+        },
+        500: {
+          $ref: '#/components/responses/InternalServerError',
+        },
+      },
+    },
+  },
+
+  '/api/auth/verify/token': {
+    post: {
+      tags: ['Auth'],
+      summary: 'Verify access token',
+      description: 'Verify access token with bearer authorization header.',
+      security: [{ bearerAuth: [] }],
+      responses: {
+        200: {
+          $ref: '#/components/responses/TokenVerifySuccess',
+        },
+        401: {
+          $ref: '#/components/responses/Unauthorized',
         },
         500: {
           $ref: '#/components/responses/InternalServerError',
