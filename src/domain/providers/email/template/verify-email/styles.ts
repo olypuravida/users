@@ -84,8 +84,8 @@ const styles = {
   },
 
   footer: {
-    // padding: '40px 74px',
-    // textAlign: 'center',
+    padding: '32px 64px',
+    textAlign: 'center',
     color: '#8898aa',
     fontSize: '12px',
   } as CSSProperties,

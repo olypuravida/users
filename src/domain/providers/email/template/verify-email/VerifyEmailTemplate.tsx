@@ -20,10 +20,10 @@ export function VerifyEmailTemplate(props: Readonly<VerifyEmailTemplateProps>) {
           <Section style={ styles.message }>
             <Img
               alt="Logo"
-              height={ 50 }
+              height={ 100 }
               src={ `${BASE_URL}/logo.png` }
               style={ styles.logo }
-              width={ 50 }
+              width="auto"
             />
           </Section>
 
@@ -32,11 +32,19 @@ export function VerifyEmailTemplate(props: Readonly<VerifyEmailTemplateProps>) {
 
             <Text style={ styles.text }>{ 'Welcome to Mindflics. Thanks for signing up!' }</Text>
 
+            <br />
+
+            <br />
+
             <Text style={ styles.text }>{ 'Please click the button below to verify your email address.' }</Text>
 
             <Button href={ verifyUrl } style={ styles.button } target='_blank'>
               Verify email
             </Button>
+
+            <br />
+
+            <br />
 
             <Text style={ styles.text }>
               Best,
@@ -48,7 +56,7 @@ export function VerifyEmailTemplate(props: Readonly<VerifyEmailTemplateProps>) {
           <Hr style={ styles.hr } />
 
           <Text style={ styles.footer }>
-            470 Noor Ave STE B #1148, South San Francisco, CA 94080
+            @2024 Mindflics, South San Francisco, CA 94080
           </Text>
         </Container>
       </Body>
