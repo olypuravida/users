@@ -50,8 +50,8 @@ export const getUserByAccessToken = async (accessToken: string) => {
 export const createUser = async (data: Prisma.UserCreateInput) => {
   const { user } = usePrisma()
   const result = await user.create({ data, include: { info: true } })
-  return result
-  // return new User(result as UserProps)
+  if (!result) { return null }
+  return new User(result as UserProps)
 }
 
 export const updateUser = async (where: Prisma.UserWhereUniqueInput, data: Prisma.UserUpdateInput) => {
