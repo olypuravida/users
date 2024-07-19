@@ -9,6 +9,7 @@ import {
   responseApiException,
   responseApiSuccess,
 } from '@/domain/providers/http'
+import { sendVerifyEmail } from '@/domain/providers/email/send'
 import { hashPassword } from '@/domain/utils/crypto'
 import { studentValidator } from './validator'
 
@@ -39,6 +40,13 @@ export async function POST(req: Request) {
     })
 
     if (!user) { throw new NotFoundException() }
+    await user.sign()
+
+    await sendVerifyEmail({
+      email: user.email,
+      username: user.username,
+      token: (await user.getAccessToken())?.accessToken,
+    })
 
     return responseApiSuccess(res, {
       content: {
