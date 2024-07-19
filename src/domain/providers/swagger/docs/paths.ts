@@ -157,6 +157,26 @@ const paths = {
       },
     },
   },
+
+  '/api/auth/verify/email': {
+    post: {
+      tags: ['Auth'],
+      summary: 'Verify email address',
+      description: 'Verify email address with bearer authorization header.',
+      security: [{ bearerAuth: [] }],
+      responses: {
+        200: {
+          $ref: '#/components/responses/EmailVerifySuccess',
+        },
+        401: {
+          $ref: '#/components/responses/Unauthorized',
+        },
+        500: {
+          $ref: '#/components/responses/InternalServerError',
+        },
+      },
+    },
+  },
 }
 
 export default paths

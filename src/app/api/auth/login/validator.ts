@@ -25,5 +25,9 @@ export const loginValidator = async (params: any) => {
     const err = new UnauthorizedException()
     err.setMessage('Incorrect password')
     throw err
+  } else if (!user.emailVerified) {
+    const err = new UnauthorizedException()
+    err.setMessage('Your email is not verified, please check your email')
+    throw err
   }
 }

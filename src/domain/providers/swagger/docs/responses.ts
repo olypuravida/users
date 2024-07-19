@@ -293,6 +293,35 @@ const responses = {
       },
     },
   },
+
+  EmailVerifySuccess: {
+    description: 'Email verify success response',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            content: {
+              type: 'object',
+              properties: {
+                message: {
+                  type: 'string',
+                  example: 'Email verified successfully!',
+                },
+                user: {
+                  $ref: '#/components/schemas/User',
+                },
+              },
+            },
+
+            status: {
+              $ref: '#/components/schemas/ResponseStatusOK',
+            },
+          },
+        },
+      },
+    },
+  },
 }
 
 export default responses
