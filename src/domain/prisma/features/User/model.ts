@@ -134,6 +134,7 @@ export class User implements UserProps {
       id: this.id,
       username: this.username,
       email: this.email,
+      emailVerified: this.emailVerified,
       accessToken,
       roles,
       info: this.info,
